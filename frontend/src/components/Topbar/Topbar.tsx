@@ -1,16 +1,22 @@
-import { Container, Navbar, Button } from 'react-bootstrap';
+import { Container, Navbar, Button, ButtonGroup } from 'react-bootstrap';
 
 interface TopBarProps {
     handleOpen: () => void,
-} 
+    isAuthorized: boolean
+}
 
-export default function Topbar({handleOpen}: TopBarProps) {
+export default function Topbar({ handleOpen, isAuthorized }: TopBarProps) {
     return (
         <>
             <Navbar bg="dark" data-bs-theme="dark">
                 <Container>
                     <Navbar.Brand href="#home">Home</Navbar.Brand>
-                    <Button onClick={handleOpen}>Log In</Button>
+                    {isAuthorized ?
+                        <Button>My Marks</Button> :
+                        <ButtonGroup aria-label="Basic example">
+                            <Button variant="secondary">Register</Button>
+                            <Button variant="primary" onClick={handleOpen}>Log In</Button>
+                        </ButtonGroup>}
                 </Container>
             </Navbar>
         </>
