@@ -6,14 +6,16 @@ import { useState, useEffect } from 'react';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from './constants';
 import { jwtDecode } from 'jwt-decode';
 import api from './api';
+import RegisterModal from './components/RegisterModal/RegisterModal';
 
 interface AuthTokenPayload {
   exp: number;
 }
 
 function App() {
-  const [isAuthorized, setIsAuthorized] = useState(false)
-  const [isOpen, setIsOpen] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isOpenSignIn, setIsOpenSignIn] = useState(false);
+  const [isOpenRegister, setIsOpenRegister] = useState(false);
 
   useEffect(() => {
     auth()
@@ -53,19 +55,28 @@ function App() {
     }
   }
 
-  function handleOpen() {
-    setIsOpen(true);
+  function handleOpenSignIn() {
+    setIsOpenSignIn(true);
   }
 
-  function handleClose() {
-    setIsOpen(false)
+  function handleCloseSignIn() {
+    setIsOpenSignIn(false)
+  }
+
+  function handleOpenRegister() {
+    setIsOpenRegister(true);
+  }
+
+  function handleCloseRegister() {
+    setIsOpenRegister(false)
   }
 
   return (
     <>
-      <Topbar handleOpen={handleOpen} isAuthorized={isAuthorized}></Topbar>
+      <Topbar handleOpenSignIn={handleOpenSignIn} handleOpenRegister={handleOpenRegister} isAuthorized={isAuthorized}></Topbar>
       <MapComponent></MapComponent>
-      <SignInModal show={isOpen} handleClose={handleClose}></SignInModal>
+      <SignInModal show={isOpenSignIn} handleCloseSignIn={handleCloseSignIn}></SignInModal>
+      <RegisterModal show={isOpenRegister} handleCloseRegister={handleCloseRegister}></RegisterModal>
     </>
   )
 }
