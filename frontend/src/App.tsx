@@ -1,12 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Topbar from './components/Topbar/Topbar';
 import MapComponent from './components/MapComponent/MapComponent';
-import SignInModal from './components/SignInModal/SignInModal';
 import { useState, useEffect } from 'react';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from './constants';
 import { jwtDecode } from 'jwt-decode';
 import api from './api';
-import RegisterModal from './components/RegisterModal/RegisterModal';
+import SessionControlModal from './components/SessionControlModal/SessionControlModal';
 
 interface AuthTokenPayload {
   exp: number;
@@ -15,7 +14,7 @@ interface AuthTokenPayload {
 function App() {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isOpenSignIn, setIsOpenSignIn] = useState(false);
-  const [isOpenRegister, setIsOpenRegister] = useState(false);
+  const [sessionControl, setSessionControl] = useState("");
 
   useEffect(() => {
     auth()
@@ -56,6 +55,7 @@ function App() {
   }
 
   function handleOpenSignIn() {
+    setSessionControl("/api/token/")
     setIsOpenSignIn(true);
   }
 
@@ -64,19 +64,20 @@ function App() {
   }
 
   function handleOpenRegister() {
-    setIsOpenRegister(true);
+    setSessionControl("/api/user/register/");
+    setIsOpenSignIn(true);
   }
 
-  function handleCloseRegister() {
-    setIsOpenRegister(false)
+  function handleLogOut() {
+    localStorage.clear()
+    window.location.reload()
   }
 
   return (
     <>
-      <Topbar handleOpenSignIn={handleOpenSignIn} handleOpenRegister={handleOpenRegister} isAuthorized={isAuthorized}></Topbar>
+      <Topbar handleOpenSignIn={handleOpenSignIn} handleOpenRegister={handleOpenRegister} handleLogOut={handleLogOut} isAuthorized={isAuthorized}></Topbar>
       <MapComponent></MapComponent>
-      <SignInModal show={isOpenSignIn} handleCloseSignIn={handleCloseSignIn}></SignInModal>
-      <RegisterModal show={isOpenRegister} handleCloseRegister={handleCloseRegister}></RegisterModal>
+      <SessionControlModal show={isOpenSignIn} route={sessionControl} handleCloseSignIn={handleCloseSignIn}></SessionControlModal>
     </>
   )
 }
