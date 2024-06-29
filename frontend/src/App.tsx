@@ -73,10 +73,15 @@ function App() {
     window.location.reload()
   }
 
+  const markers = [
+    { id: '1', x:0, y: 0, name:'Marker 1' },
+    { id: '2', y:40.4169473, x:-3.7035285, name: 'Marker 2' },
+  ];
+
   return (
     <>
       <Topbar handleOpenSignIn={handleOpenSignIn} handleOpenRegister={handleOpenRegister} handleLogOut={handleLogOut} isAuthorized={isAuthorized}></Topbar>
-      <MapComponent></MapComponent>
+      <MapComponent markers={markers}></MapComponent>
       <SessionControlModal show={isOpenSignIn} route={sessionControl} handleCloseSignIn={handleCloseSignIn}></SessionControlModal>
     </>
   )
