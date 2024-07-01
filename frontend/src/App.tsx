@@ -12,13 +12,22 @@ interface AuthTokenPayload {
 }
 
 function App() {
+  const [markers, setMarkers] = useState([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isOpenSignIn, setIsOpenSignIn] = useState(false);
   const [sessionControl, setSessionControl] = useState("");
 
   useEffect(() => {
-    auth()
-  })
+    getMarkers();
+    auth();
+  }, []);
+
+  function getMarkers() {
+    api.get("/api/markers/")
+    .then((res) => res.data)
+    .then((data) => {setMarkers(data); console.log(data)})
+    .catch((err) => alert(err));
+  }
 
   const refreshToken = async () => {
     const refreshToken = localStorage.getItem(REFRESH_TOKEN)
@@ -73,15 +82,10 @@ function App() {
     window.location.reload()
   }
 
-  const markers = [
-    { id: '1', x:0, y: 0, name:'Marker 1' },
-    { id: '2', y:40.4169473, x:-3.7035285, name: 'Marker 2' },
-  ];
-
   return (
     <>
       <Topbar handleOpenSignIn={handleOpenSignIn} handleOpenRegister={handleOpenRegister} handleLogOut={handleLogOut} isAuthorized={isAuthorized}></Topbar>
-      <MapComponent markers={markers}></MapComponent>
+      <MapComponent markers={markers} isAuthorized={isAuthorized}></MapComponent>
       <SessionControlModal show={isOpenSignIn} route={sessionControl} handleCloseSignIn={handleCloseSignIn}></SessionControlModal>
     </>
   )
