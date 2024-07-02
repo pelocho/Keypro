@@ -18,7 +18,23 @@ class MarkerListCreate(generics.ListCreateAPIView):
         else:
             print(serializer.error)
             
+class MarkersListByAuthor(generics.ListAPIView):
+    serializer_class = MarkersSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        user = self.request.user
+        return Marker.objects.filter(author=user)
+            
 class MarkerDelete(generics.DestroyAPIView):
+    serializer_class = MarkersSerializer
+    permission_classes = [IsAuthenticated]
+    
+    def get_queryset(self):
+        user = self.request.user
+        return Marker.objects.filter(author=user)
+    
+class MarkerUpdate(generics.UpdateAPIView):
     serializer_class = MarkersSerializer
     permission_classes = [IsAuthenticated]
     

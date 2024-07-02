@@ -16,7 +16,7 @@ import PopupNewMarker from '../PopupNewMarker/PopupNewMarker';
 interface Marker {
     id: string;
     longitude: number;
-    latitude: number
+    latitude: number;
     name: string;
     description: string;
 }

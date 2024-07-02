@@ -4,10 +4,11 @@ interface TopBarProps {
     handleOpenSignIn: () => void,
     handleOpenRegister: () => void,
     handleLogOut: () => void,
+    handleOpenMyMarkers: () => void,
     isAuthorized: boolean
 }
 
-export default function Topbar({ handleOpenSignIn, handleOpenRegister,handleLogOut , isAuthorized }: TopBarProps) {
+export default function Topbar({ handleOpenSignIn, handleOpenRegister, handleLogOut, handleOpenMyMarkers, isAuthorized }: TopBarProps) {
     return (
         <>
             <Navbar bg="dark" data-bs-theme="dark">
@@ -15,7 +16,7 @@ export default function Topbar({ handleOpenSignIn, handleOpenRegister,handleLogO
                     <Navbar.Brand>Keypro</Navbar.Brand>
                     {isAuthorized ?
                         <ButtonGroup aria-label="session-control-buttons">
-                            <Button variant="primary">My Markers</Button>
+                            <Button variant="primary" onClick={handleOpenMyMarkers}>My Markers</Button>
                             <Button variant="secondary" onClick={handleLogOut}>Log Out</Button>
                         </ButtonGroup> :
                         <ButtonGroup aria-label="session-control">

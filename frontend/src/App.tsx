@@ -6,6 +6,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from './constants';
 import { jwtDecode } from 'jwt-decode';
 import api from './api';
 import SessionControlModal from './components/SessionControlModal/SessionControlModal';
+import MyMarkersPopup from './components/MyMarkersPopup/MyMarkersPopup';
 
 interface AuthTokenPayload {
   exp: number;
@@ -13,8 +14,10 @@ interface AuthTokenPayload {
 
 function App() {
   const [markers, setMarkers] = useState([]);
+  const [myMarkers, setMyMarkers] = useState([]);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isOpenSignIn, setIsOpenSignIn] = useState(false);
+  const [isOpenMyMarkers, setIsOpenMyMarkers] = useState(false);
   const [sessionControl, setSessionControl] = useState("");
 
   useEffect(() => {
@@ -24,9 +27,16 @@ function App() {
 
   function getMarkers() {
     api.get("/api/markers/")
-    .then((res) => res.data)
-    .then((data) => {setMarkers(data); console.log(data)})
-    .catch((err) => alert(err));
+      .then((res) => res.data)
+      .then((data) => setMarkers(data))
+      .catch((err) => alert(err));
+  }
+
+  function getMyMarkers() {
+    api.get("/api/mymarkers/")
+      .then((res) => res.data)
+      .then((data) => setMyMarkers(data))
+      .catch((err) => alert(err));
   }
 
   const refreshToken = async () => {
@@ -82,11 +92,21 @@ function App() {
     window.location.reload()
   }
 
+  function handleOpenMyMarkers() {
+    getMyMarkers();
+    setIsOpenMyMarkers(true);
+  }
+
+  function handleCloseMyMarkers() {
+    setIsOpenMyMarkers(false);
+  }
+
   return (
     <>
-      <Topbar handleOpenSignIn={handleOpenSignIn} handleOpenRegister={handleOpenRegister} handleLogOut={handleLogOut} isAuthorized={isAuthorized}></Topbar>
+      <Topbar handleOpenSignIn={handleOpenSignIn} handleOpenMyMarkers={handleOpenMyMarkers} handleOpenRegister={handleOpenRegister} handleLogOut={handleLogOut} isAuthorized={isAuthorized}></Topbar>
       <MapComponent markers={markers} isAuthorized={isAuthorized}></MapComponent>
       <SessionControlModal show={isOpenSignIn} route={sessionControl} handleCloseSignIn={handleCloseSignIn}></SessionControlModal>
+      <MyMarkersPopup show={isOpenMyMarkers} myMarkers={myMarkers} handleCloseMyMarkers={handleCloseMyMarkers}></MyMarkersPopup>
     </>
   )
 }
