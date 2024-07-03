@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from rest_framework import status
 from api.models import Marker
-from api.serializers import MarkersSerializer
 from django.urls import reverse
 
 
@@ -52,7 +51,7 @@ class TestMarkersListByAuthor:
         url = reverse('my-markers-list')
         response = api_client.get(url)
         assert response.status_code == status.HTTP_200_OK
-        assert len(response.data) == 1  # Verifica que solo haya un marcador para el usuario autenticado
+        assert len(response.data) == 1
 
 
 @pytest.mark.django_db
